@@ -1,0 +1,43 @@
+baseURL = "https://bkim.me/"
+languageCode = "en-us"
+title = "BK"
+theme = "pulp"
+
+[markup.goldmark.renderer]
+    unsafe = true # Allow user HTML tags
+
+[params]
+    author = "Brian Kim"
+    avatar = "avatar.jpg"
+    # avatarDescription = "My avatar description"
+    favicon = "favicon.ico"
+    description = """
+        Just another dude trying his best.
+    """
+    publicationYear = "2020"
+
+# Make sure setting a following option for search bar to work
+[outputs]
+    section = ["JSON", "HTML"]
+    term = ["JSON", "HTML"]
+
+[[menu.main]]
+    identifier = "github"
+    # name = "GitHub"
+    pre = "<i class='fab fa-github fa-lg'></i>"
+    url = "https://github.com/briansan"
+    weight = 30
+
+[[menu.main]]
+    identifier = "linkedin"
+    # name = "Twitter"
+    pre = "<i class='fab fa-linkedin fa-lg'></i>"
+    url = "https://www.linkedin.com/in/brian-kim-709a5043/"
+    weight = 20
+
+[[menu.main]]
+    identifier = "email"
+    # name = "Email"
+    pre = "<i class='fa fa-envelope fa-lg'></i>"
+    url = "mailto:briansan24@gmail.com"
+    weight = 40
