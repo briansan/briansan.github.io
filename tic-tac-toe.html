@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>BK | Games</title>
+  <title>BK | Tic-Tac-Toe</title>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
   <link rel="stylesheet" href="/site-custom.css" />
 </head>
-<body class="games-list-page">
+<body class="games-page">
   <header id="topBar">
     <div id="topBarInner">
       <a id="topBarBrand" href="/index.html">BK</a>
@@ -28,31 +28,30 @@
   </header>
 
   <main class="page-main">
-    <section id="gamesListing" class="content-card" aria-labelledby="gamesHeading">
-      <h1 id="gamesHeading">Games</h1>
-      <p>Play classic two-player games directly in the browser.</p>
-
-      <ul class="game-line-list" aria-label="Available games">
-        <li class="game-line-item">
-          <a class="game-line-title" href="/tic-tac-toe.html">Tic-Tac-Toe</a>
-          <span class="game-line-description">Classic 3x3 strategy game where X moves first.</span>
-          <a class="game-line-thumb" href="/tic-tac-toe.html" aria-label="Open Tic-Tac-Toe">
-            <img src="/img/tic-tac-toe.png" alt="Tic-Tac-Toe screenshot" loading="lazy" />
-          </a>
-        </li>
-        <li class="game-line-item">
-          <a class="game-line-title" href="/connect-4.html">Connect 4</a>
-          <span class="game-line-description">Drop discs in a 7-column grid and connect four to win.</span>
-          <a class="game-line-thumb" href="/connect-4.html" aria-label="Open Connect 4">
-            <img src="/img/connect-4.png" alt="Connect 4 screenshot" loading="lazy" />
-          </a>
-        </li>
-      </ul>
+    <section id="games" class="content-card" aria-labelledby="gamesHeading">
+      <h1 id="gamesHeading">Tic-Tac-Toe</h1>
+      <p>You are X and go first. Make three in a row to win.</p>
+      <a class="back-link" href="/games.html">&larr; Back to Games</a>
+      <div id="ticTacToeBoard" role="grid" aria-label="Tic-Tac-Toe board">
+        <button type="button" class="ttt-cell" data-index="0" aria-label="Cell 1"></button>
+        <button type="button" class="ttt-cell" data-index="1" aria-label="Cell 2"></button>
+        <button type="button" class="ttt-cell" data-index="2" aria-label="Cell 3"></button>
+        <button type="button" class="ttt-cell" data-index="3" aria-label="Cell 4"></button>
+        <button type="button" class="ttt-cell" data-index="4" aria-label="Cell 5"></button>
+        <button type="button" class="ttt-cell" data-index="5" aria-label="Cell 6"></button>
+        <button type="button" class="ttt-cell" data-index="6" aria-label="Cell 7"></button>
+        <button type="button" class="ttt-cell" data-index="7" aria-label="Cell 8"></button>
+        <button type="button" class="ttt-cell" data-index="8" aria-label="Cell 9"></button>
+      </div>
+      <p id="gameStatus" aria-live="polite">Player X's turn.</p>
+      <button type="button" id="resetTicTacToe">Reset Game</button>
     </section>
   </main>
 
   <footer>
     <p>Made with &#x2764; by Brian Kim.</p>
   </footer>
+
+  <script src="/tic-tac-toe.js"></script>
 </body>
 </html>
