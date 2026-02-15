@@ -49,9 +49,138 @@
   <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
   <![endif]-->
+  
+  
+  
+  <style>
+    #gamesContainer {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 0 0 48px;
+      box-sizing: border-box;
+    }
 
-  
-  
+    #games {
+      width: 100%;
+      max-width: 520px;
+      padding: 24px;
+      border-radius: 16px;
+      border: 1px solid #d8d8d8;
+      background-color: #f8f8f8;
+      box-sizing: border-box;
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.08);
+    }
+
+    #games h2 {
+      margin: 0;
+    }
+
+    #games p {
+      margin: 8px 0 0;
+    }
+
+    #ticTacToeBoard {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .ttt-cell {
+      aspect-ratio: 1 / 1;
+      border: 1px solid #c7c7c7;
+      border-radius: 12px;
+      background-color: #ffffff;
+      color: #3d3d3d;
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    .ttt-cell:hover:enabled {
+      transform: translateY(-1px);
+      background-color: #efefef;
+    }
+
+    .ttt-cell:disabled {
+      cursor: default;
+    }
+
+    .ttt-cell.win {
+      background-color: #dff2de;
+      border-color: #7eb27a;
+      color: #23611f;
+    }
+
+    #gameStatus {
+      min-height: 24px;
+      margin: 14px 0 0;
+      font-weight: 600;
+    }
+
+    #resetTicTacToe {
+      margin-top: 12px;
+      padding: 10px 16px;
+      border: 1px solid #bcbcbc;
+      border-radius: 10px;
+      background-color: #ffffff;
+      color: #3d3d3d;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    #resetTicTacToe:hover {
+      background-color: #efefef;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #games {
+        border-color: #4b4b4b;
+        background-color: #2f2f2f;
+        box-shadow: 0 12px 26px rgba(0, 0, 0, 0.28);
+      }
+
+      .ttt-cell {
+        background-color: #3d3d3d;
+        border-color: #5f5f5f;
+        color: #ececec;
+      }
+
+      .ttt-cell:hover:enabled {
+        background-color: #4b4b4b;
+      }
+
+      .ttt-cell.win {
+        background-color: #3f5f3d;
+        border-color: #7cad79;
+        color: #d8f3d7;
+      }
+
+      #resetTicTacToe {
+        border-color: #6a6a6a;
+        background-color: #454545;
+        color: #f1f1f1;
+      }
+
+      #resetTicTacToe:hover {
+        background-color: #525252;
+      }
+    }
+
+    @media (max-width: 640px) {
+      #games {
+        padding: 18px;
+      }
+
+      .ttt-cell {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
 </head>
 <body>
     <div id="profileContainer">
@@ -76,14 +205,130 @@
             <li><a href="https://github.com/briansan" aria-label="github"><i class='fab fa-github fa-lg'></i><br></a></li>
             
             <li><a href="mailto:briansan24@gmail.com" aria-label="email"><i class='fa fa-envelope fa-lg'></i><br></a></li>
+
+            <li><a href="#games" aria-label="games"><i class='fas fa-gamepad fa-lg'></i><br></a></li>
             
           </ul>
         </nav>
       </div>
-    </div><footer>
+    </div>
+    <main id="gamesContainer">
+      <section id="games" aria-labelledby="gamesHeading">
+        <h2 id="gamesHeading">Games</h2>
+        <p>First release: Tic-Tac-Toe. You are X and go first.</p>
+        <div id="ticTacToeBoard" role="grid" aria-label="Tic-Tac-Toe board">
+          <button type="button" class="ttt-cell" data-index="0" aria-label="Cell 1"></button>
+          <button type="button" class="ttt-cell" data-index="1" aria-label="Cell 2"></button>
+          <button type="button" class="ttt-cell" data-index="2" aria-label="Cell 3"></button>
+          <button type="button" class="ttt-cell" data-index="3" aria-label="Cell 4"></button>
+          <button type="button" class="ttt-cell" data-index="4" aria-label="Cell 5"></button>
+          <button type="button" class="ttt-cell" data-index="5" aria-label="Cell 6"></button>
+          <button type="button" class="ttt-cell" data-index="6" aria-label="Cell 7"></button>
+          <button type="button" class="ttt-cell" data-index="7" aria-label="Cell 8"></button>
+          <button type="button" class="ttt-cell" data-index="8" aria-label="Cell 9"></button>
+        </div>
+        <p id="gameStatus" aria-live="polite">Player X's turn.</p>
+        <button type="button" id="resetTicTacToe">Reset Game</button>
+      </section>
+    </main>
+    <footer>
   <p>
 	Made with &#x2764; by Brian Kim.
   </p>
 </footer>
+<script>
+  (function () {
+    var board = ["", "", "", "", "", "", "", "", ""];
+    var currentPlayer = "X";
+    var isActive = true;
+    var winningLines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6]
+    ];
+
+    var cells = document.querySelectorAll(".ttt-cell");
+    var statusEl = document.getElementById("gameStatus");
+    var resetButton = document.getElementById("resetTicTacToe");
+
+    function checkWin(player) {
+      for (var i = 0; i < winningLines.length; i++) {
+        var line = winningLines[i];
+        if (
+          board[line[0]] === player &&
+          board[line[1]] === player &&
+          board[line[2]] === player
+        ) {
+          return line;
+        }
+      }
+      return null;
+    }
+
+    function setBoardDisabled(disabled) {
+      for (var i = 0; i < cells.length; i++) {
+        cells[i].disabled = disabled;
+      }
+    }
+
+    function handleMove(index) {
+      if (!isActive || board[index] !== "") {
+        return;
+      }
+
+      board[index] = currentPlayer;
+      cells[index].textContent = currentPlayer;
+
+      var winningLine = checkWin(currentPlayer);
+      if (winningLine) {
+        isActive = false;
+        statusEl.textContent = "Player " + currentPlayer + " wins!";
+        for (var i = 0; i < winningLine.length; i++) {
+          cells[winningLine[i]].classList.add("win");
+        }
+        setBoardDisabled(true);
+        return;
+      }
+
+      var hasOpenCell = board.indexOf("") !== -1;
+      if (!hasOpenCell) {
+        isActive = false;
+        statusEl.textContent = "It's a draw.";
+        setBoardDisabled(true);
+        return;
+      }
+
+      currentPlayer = currentPlayer === "X" ? "O" : "X";
+      statusEl.textContent = "Player " + currentPlayer + "'s turn.";
+    }
+
+    function resetGame() {
+      board = ["", "", "", "", "", "", "", "", ""];
+      currentPlayer = "X";
+      isActive = true;
+      statusEl.textContent = "Player X's turn.";
+
+      for (var i = 0; i < cells.length; i++) {
+        cells[i].textContent = "";
+        cells[i].classList.remove("win");
+      }
+      setBoardDisabled(false);
+    }
+
+    for (var i = 0; i < cells.length; i++) {
+      cells[i].addEventListener("click", function (event) {
+        var index = Number(event.currentTarget.getAttribute("data-index"));
+        handleMove(index);
+      });
+    }
+
+    resetButton.addEventListener("click", resetGame);
+  })();
+</script>
 </body>
 </html>
