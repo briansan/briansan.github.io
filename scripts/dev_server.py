@@ -124,14 +124,17 @@ def create_handler(root: Path, state: VersionState):
 
       super().do_GET()
 
-    def _serve_reload_version(self) -> None:
-      payload = json.dumps({"version": state.get()}).encode("utf-8")
-      self.send_response(200)
+    def _send_json(self, status_code: int, payload: dict[str, object]) -> None:
+      body = json.dumps(payload).encode("utf-8")
+      self.send_response(status_code)
       self.send_header("Content-Type", "application/json; charset=utf-8")
       self.send_header("Cache-Control", "no-store")
-      self.send_header("Content-Length", str(len(payload)))
+      self.send_header("Content-Length", str(len(body)))
       self.end_headers()
-      self.wfile.write(payload)
+      self.wfile.write(body)
+
+    def _serve_reload_version(self) -> None:
+      self._send_json(200, {"version": state.get()})
 
     def _resolve_html_path(self, request_path: str) -> Path | None:
       local_path = Path(self.translate_path(request_path))
